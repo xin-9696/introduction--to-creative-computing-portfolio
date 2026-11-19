@@ -1,19 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Shuming Zhang | Creative Computing Portfolio</title>
 
   <style>
     :root {
-      --background: #f5f5f5;
-      --text: #222;
-      --muted: #666;
-      --link: #2468a0;
+      --bg: #080808;
+      --card: #151515;
+      --card-hover: #1d1d1d;
+      --text: #ffffff;
+      --muted: #aaaaaa;
+      --border: #333333;
+      --accent: #b8baff;
     }
 
     * {
@@ -26,91 +26,159 @@
 
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: var(--background);
+      background: var(--bg);
       color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
       line-height: 1.7;
+      overflow-x: hidden;
     }
+
+    /* Mouse particle canvas */
+
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Welcome section */
 
     header {
-      background-color: #222;
-      color: white;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 75px 20px 55px;
+      padding: 80px 20px;
+      background: #080808;
+      border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
-    header h1 {
-      font-size: clamp(30px, 5vw, 52px);
-      line-height: 1.3;
-      margin: 10px 0 20px;
-    }
-
-    header p {
-      color: #ddd;
-    }
-
-    .subtitle {
-      letter-spacing: 2px;
-      text-transform: uppercase;
+    .eyebrow {
+      font-family: monospace;
+      letter-spacing: 3px;
+      color: var(--muted);
       font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .welcome-title {
+      font-size: clamp(36px, 6vw, 76px);
+      line-height: 1.15;
+      max-width: 950px;
+      margin: 25px auto;
+      letter-spacing: -2px;
+      transition: transform 0.2s ease;
+    }
+
+    .welcome-title:hover {
+      transform: scale(1.025);
     }
 
     .smile {
       display: inline-block;
-      white-space: nowrap;
+      color: var(--accent);
+      transition: transform 0.5s ease;
+      cursor: default;
     }
+
+    .smile:hover {
+      transform: rotate(360deg) scale(1.3);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .hint {
+      margin-top: 30px;
+      font-family: monospace;
+      color: #777;
+      font-size: 12px;
+    }
+
+    /* Navigation */
 
     nav {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin-top: 30px;
+      gap: 12px;
+      max-width: 800px;
+      margin-top: 35px;
     }
 
     nav a {
       color: white;
       text-decoration: none;
-      padding: 8px 15px;
-      border: 1px solid #777;
+      padding: 9px 17px;
+      border: 1px solid #555;
       border-radius: 7px;
+      font-size: 14px;
+      transition: 0.25s ease;
     }
 
     nav a:hover {
-      background-color: white;
-      color: #222;
+      color: #080808;
+      background: white;
+      border-color: white;
+      transform: translateY(-3px);
     }
+
+    /* Main content */
 
     main {
       max-width: 950px;
       margin: auto;
-      padding: 35px 20px;
+      padding: 60px 20px;
     }
 
     .week {
-      margin-bottom: 55px;
-      scroll-margin-top: 20px;
+      margin-bottom: 80px;
+      scroll-margin-top: 30px;
     }
 
     .week-title {
-      font-size: 30px;
+      font-size: 34px;
       margin-bottom: 5px;
+      letter-spacing: -1px;
     }
 
     .week-description {
       color: var(--muted);
       margin-top: 0;
-      margin-bottom: 22px;
+      margin-bottom: 25px;
     }
+
+    /* Project cards */
 
     .card {
-      background-color: white;
-      padding: 26px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
       margin-bottom: 20px;
-      border-radius: 9px;
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
     }
 
-    h2, h3 {
+    .card:hover {
+      transform: translateY(-5px);
+      background: var(--card-hover);
+      border-color: #666;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+    }
+
+    h1, h2, h3 {
       line-height: 1.4;
     }
 
@@ -121,7 +189,7 @@
 
     .card h3 {
       font-size: 19px;
-      margin-top: 24px;
+      margin-top: 25px;
     }
 
     p {
@@ -129,37 +197,38 @@
     }
 
     a {
-      color: var(--link);
+      color: var(--accent);
       overflow-wrap: anywhere;
     }
 
     a:hover {
-      text-decoration: underline;
+      color: white;
     }
 
-    .card img {
+    img {
       max-width: 100%;
       height: auto;
-      border-radius: 5px;
+      border-radius: 7px;
     }
 
     iframe {
       display: block;
       width: 100%;
       height: 500px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
+      border: 1px solid #444;
+      border-radius: 7px;
       margin: 18px 0;
+      background: #222;
     }
 
     hr {
       border: none;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid #444;
       margin: 25px 0;
     }
 
     .exercise {
-      margin-bottom: 25px;
+      margin-bottom: 28px;
     }
 
     .exercise:last-child {
@@ -168,26 +237,58 @@
 
     footer {
       text-align: center;
-      color: #666;
-      padding: 30px;
+      padding: 35px 20px;
+      color: #888;
+      border-top: 1px solid var(--border);
       font-size: 14px;
     }
 
+    /* Mobile layout */
+
     @media (max-width: 600px) {
       header {
-        padding: 50px 18px 40px;
+        min-height: 65vh;
+        padding: 60px 18px;
+      }
+
+      .welcome-title {
+        letter-spacing: -1px;
       }
 
       main {
-        padding: 25px 14px;
+        padding: 35px 14px;
       }
 
       .card {
-        padding: 19px;
+        padding: 20px;
       }
 
       iframe {
         height: 400px;
+      }
+
+      .week-title {
+        font-size: 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .card,
+      .welcome-title,
+      .smile,
+      nav a {
+        transition: none;
+      }
+
+      .card:hover,
+      .welcome-title:hover,
+      .smile:hover,
+      nav a:hover {
+        transform: none;
       }
     }
   </style>
@@ -195,23 +296,30 @@
 
 <body>
 
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
   <!-- WELCOME HEADER -->
 
   <header>
-    <p class="subtitle">
+    <p class="eyebrow">
       Introduction to Creative Computing
     </p>
 
-    <h1>
-      Welcome to Shuming Zhang's Portfolio
+    <h1 class="welcome-title">
+      Welcome to<br>
+      Shuming Zhang's Portfolio
       <span class="smile">:)</span>
     </h1>
 
-    <p>
+    <p class="subtitle">
       Creative Coding · Experiments · Reflections
     </p>
 
-    <nav>
+    <p class="hint">
+      Move your cursor around :)
+    </p>
+
+    <nav aria-label="Portfolio navigation">
       <a href="#week1">Week 1</a>
       <a href="#week2">Week 2</a>
       <a href="#week3">Week 3</a>
@@ -225,10 +333,9 @@
 
   <main>
 
-    <!-- ================= WEEK 1 ================= -->
+    <!-- WEEK 1 -->
 
     <section class="week" id="week1">
-
       <h2 class="week-title">Week 1</h2>
       <p class="week-description">
         Getting Started with p5.js
@@ -239,7 +346,7 @@
 
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/DxPT-eW6P"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Color Sketch
           </a>
         </p>
@@ -260,14 +367,11 @@
           I understand the basic process better.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 2 ================= -->
+    <!-- WEEK 2 -->
 
     <section class="week" id="week2">
-
       <h2 class="week-title">Week 2</h2>
       <p class="week-description">
         Data Self Portrait
@@ -301,14 +405,11 @@
           the videos.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 3 ================= -->
+    <!-- WEEK 3 -->
 
     <section class="week" id="week3">
-
       <h2 class="week-title">Week 3</h2>
       <p class="week-description">
         Draw, then Code
@@ -318,10 +419,11 @@
         <h2>Draw, then Code</h2>
 
         <p>
-          In this project, I used p5.js to recreate a simplified
-          version of my desktop wallpaper. I used basic shapes,
-          lines and transparency to draw a tree, a railing and
-          reflections in the water.
+          In this project, I used p5.js to recreate a
+          simplified version of my desktop wallpaper.
+          I used basic shapes, lines and transparency
+          to draw a tree, a railing and reflections
+          in the water.
         </p>
       </div>
 
@@ -342,7 +444,7 @@
 
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/lsG5gK2H7"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View my Draw, then Code project
           </a>
         </p>
@@ -352,33 +454,31 @@
         <h2>Reflection</h2>
 
         <p>
-          Today, I finished my Draw, then Code project using
-          p5.js. I learned that trying different ideas and
-          making mistakes are important parts of creative
-          coding.
+          Today, I finished my Draw, then Code project
+          using p5.js. I learned that trying different
+          ideas and making mistakes are important parts
+          of creative coding.
         </p>
 
         <p>
-          I also realised that creative coding requires more
-          maths than I expected. If I could calculate the exact
-          positions and coordinates of shapes and lines on the
-          canvas, it would be much easier to create what I want,
-          instead of changing numbers again and again.
+          I also realised that creative coding requires
+          more maths than I expected. If I could calculate
+          the exact positions and coordinates of shapes
+          and lines on the canvas, it would be much easier
+          to create what I want, instead of changing
+          numbers again and again.
         </p>
 
         <p>
-          I think I need to improve my maths skills to become
-          better at creative coding.
+          I think I need to improve my maths skills
+          to become better at creative coding.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 4 ================= -->
+    <!-- WEEK 4 -->
 
     <section class="week" id="week4">
-
       <h2 class="week-title">Week 4</h2>
       <p class="week-description">
         Loops and Conditional Statements
@@ -386,32 +486,28 @@
 
       <div class="card">
         <h2>Week 4 - Individual Work</h2>
-
         <h3>Loops and Conditional Statements</h3>
 
         <h3>1. Left or Right</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/gyUhTupC3"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Left or Right on p5.js
           </a>
         </p>
 
         <h3>2. Billiard Ball (down in class)</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/v-kPhDiTw"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Billiard Ball on p5.js
           </a>
         </p>
 
         <h3>3. Seven Circles</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/09gKpmIOt"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Seven Circles on p5.js
           </a>
         </p>
@@ -484,14 +580,11 @@
           experience and understanding.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 5 ================= -->
+    <!-- WEEK 5 -->
 
     <section class="week" id="week5">
-
       <h2 class="week-title">Week 5</h2>
       <p class="week-description">
         Programming Exercises
@@ -501,15 +594,15 @@
         <h2>Programming Exercises</h2>
 
         <p>
-          This week, I practised different programming concepts
-          using p5.js, including functions, arrays, conditions
-          and interactive movement.
+          This week, I practised different programming
+          concepts using p5.js, including functions,
+          arrays, conditions and interactive movement.
         </p>
 
         <h3>Exercise 1</h3>
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/7AZxcB8sE"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 1
           </a>
         </p>
@@ -517,7 +610,7 @@
         <h3>Exercise 2</h3>
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/In-xDkrht"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 2
           </a>
         </p>
@@ -525,7 +618,7 @@
         <h3>Exercise 3</h3>
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/RDcq3pCyV"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 3
           </a>
         </p>
@@ -533,7 +626,7 @@
         <h3>Exercise 4</h3>
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/Kc8iaf6wY"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 4
           </a>
         </p>
@@ -541,7 +634,7 @@
         <h3>Exercise 5</h3>
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/SgHFJH3Qx"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 5
           </a>
         </p>
@@ -551,10 +644,11 @@
         <h2>Reflection</h2>
 
         <p>
-          This week, I learned several new programming concepts,
-          including functions, arrays and different conditions.
-          Some of them reminded me of mathematics. I started to
-          understand that programming is about combining different
+          This week, I learned several new programming
+          concepts, including functions, arrays and
+          different conditions. Some of them reminded
+          me of mathematics. I started to understand
+          that programming is about combining different
           rules and conditions to create interactive results.
         </p>
 
@@ -562,11 +656,11 @@
           I still found this week's work quite complicated,
           especially when trying to understand how different
           parts of the code work together. However, after
-          completing several exercises and practising repeatedly,
-          I feel that I have gradually developed a better
-          understanding of these concepts. I am becoming more
-          confident with coding, although I still need more
-          practice.
+          completing several exercises and practising
+          repeatedly, I feel that I have gradually developed
+          a better understanding of these concepts.
+          I am becoming more confident with coding,
+          although I still need more practice.
         </p>
       </div>
 
@@ -583,14 +677,11 @@
           understanding.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 6 ================= -->
+    <!-- WEEK 6 -->
 
     <section class="week" id="week6">
-
       <h2 class="week-title">Week 6</h2>
       <p class="week-description">
         Creative Coding: Randomness and Noise
@@ -600,37 +691,33 @@
         <h2>My p5.js Sketches</h2>
 
         <h3>Exercise 1 - Coin Toss</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/hOXIqItgL"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 1 - Coin Toss
           </a>
         </p>
 
         <h3>Exercise 2 - Drunk Walk I</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/0C5R4RxrI"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 2 - Drunk Walk I
           </a>
         </p>
 
         <h3>Exercise 3 - Drunk Walk II</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/bQPs9kwXd"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 3 - Drunk Walk II
           </a>
         </p>
 
         <h3>Exercise 4 - Drunk Walk III</h3>
-
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/WCkIT7k1L"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             My p5.js Exercise 4 - Drunk Walk III
           </a>
         </p>
@@ -640,53 +727,58 @@
         <h2>Reflection</h2>
 
         <p>
-          This week, our teacher raised an interesting question
-          in class: Can something created by a computer be
-          considered art? I think the answer is yes.
+          This week, our teacher raised an interesting
+          question in class: Can something created by
+          a computer be considered art? I think the
+          answer is yes.
         </p>
 
         <p>
-          In my understanding, art is a way of expressing ideas
-          and meanings. How these ideas are expressed and
-          understood can be influenced by the artist's intentions.
-          For example, some abstract paintings may look difficult
-          to understand, but they can still be meaningful if the
-          artist has a clear idea behind them. I think creative
-          coding works in a similar way.
+          In my understanding, art is a way of expressing
+          ideas and meanings. How these ideas are expressed
+          and understood can be influenced by the artist's
+          intentions. For example, some abstract paintings
+          may look difficult to understand, but they can
+          still be meaningful if the artist has a clear
+          idea behind them. I think creative coding works
+          in a similar way.
         </p>
 
         <p>
-          Another important point is originality. Other people
-          may be able to copy the same code and create something
-          that looks similar, but the original idea and thinking
-          process still belong to the creator. For me, the
-          creative thinking behind a work is just as important
-          as the final result.
+          Another important point is originality. Other
+          people may be able to copy the same code and
+          create something that looks similar, but the
+          original idea and thinking process still belong
+          to the creator. For me, the creative thinking
+          behind a work is just as important as the
+          final result.
         </p>
 
         <p>
-          This week, we also learned about random() and noise().
-          These functions showed me how randomness can bring
-          more possibilities into digital art. Even when people
-          use the same code, the results may be different each
-          time the program runs. This makes creative coding
-          more interesting because the artist cannot completely
-          control every result.
+          This week, we also learned about random()
+          and noise(). These functions showed me how
+          randomness can bring more possibilities into
+          digital art. Even when people use the same
+          code, the results may be different each time
+          the program runs. This makes creative coding
+          more interesting because the artist cannot
+          completely control every result.
         </p>
 
         <p>
           I also think this unpredictability makes digital
           artworks more unique. A simple line or shape can
-          develop in unexpected ways through code. This means
-          that even a small program can create many different
-          visual experiences.
+          develop in unexpected ways through code.
+          This means that even a small program can create
+          many different visual experiences.
         </p>
 
         <p>
-          Overall, this week helped me understand that creative
-          coding is not just about writing code. It is also
-          about using technology to express personal ideas
-          and explore new possibilities in art.
+          Overall, this week helped me understand that
+          creative coding is not just about writing code.
+          It is also about using technology to express
+          personal ideas and explore new possibilities
+          in art.
         </p>
       </div>
 
@@ -694,30 +786,28 @@
         <h2>AI Disclaimer</h2>
 
         <p>
-          I used ChatGPT as a learning assistant during this
-          week's creative coding exercises. AI helped me
-          understand programming concepts such as random(),
-          noise(), variables and conditional statements.
-          It also helped me identify coding errors and
-          understand how different parts of the programs work.
+          I used ChatGPT as a learning assistant during
+          this week's creative coding exercises.
+          AI helped me understand programming concepts
+          such as random(), noise(), variables and
+          conditional statements. It also helped me
+          identify coding errors and understand how
+          different parts of the programs work.
         </p>
 
         <p>
-          I also used AI to help organise my reflection and
-          improve my English writing. The main creative ideas
-          and decisions were my own. I used AI as a tool to
-          support my learning and understanding of creative
-          coding.
+          I also used AI to help organise my reflection
+          and improve my English writing. The main creative
+          ideas and decisions were my own. I used AI as
+          a tool to support my learning and understanding
+          of creative coding.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 7 ================= -->
+    <!-- WEEK 7 -->
 
     <section class="week" id="week7">
-
       <h2 class="week-title">Week 7</h2>
       <p class="week-description">
         Curves and Mathematical Methods
@@ -727,16 +817,16 @@
         <h2>Introduction</h2>
 
         <p>
-          This week, we explored different ways to create shapes
-          using mathematics and code. We completed exercises
-          from the book Code as Creative Medium by Golan Levin
-          and Tega Brain.
+          This week, we explored different ways to create
+          shapes using mathematics and code. We completed
+          exercises from the book Code as Creative Medium
+          by Golan Levin and Tega Brain.
         </p>
 
         <p>
           These exercises helped me understand how curves,
-          mathematical functions and repeated movements can
-          be used to create visual shapes.
+          mathematical functions and repeated movements
+          can be used to create visual shapes.
         </p>
       </div>
 
@@ -744,11 +834,11 @@
         <h2>Exercise 1 - Butt Generator</h2>
 
         <p>
-          In this exercise, I used Bezier curves to create a
-          shape. I explored how changing the control points
-          can change the appearance of the curves. This helped
-          me understand how curves can be controlled through
-          code.
+          In this exercise, I used Bezier curves to create
+          a shape. I explored how changing the control
+          points can change the appearance of the curves.
+          This helped me understand how curves can be
+          controlled through code.
         </p>
 
         <iframe
@@ -759,7 +849,7 @@
 
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/0U4Du95oE"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Original Sketch
           </a>
         </p>
@@ -771,9 +861,9 @@
         <p>
           I used sin() and cos() to calculate the positions
           of points on a circle. By repeating this calculation,
-          many small points form a circular shape. This showed
-          me how mathematical functions can be used to create
-          visual patterns.
+          many small points form a circular shape.
+          This showed me how mathematical functions can
+          be used to create visual patterns.
         </p>
 
         <iframe
@@ -784,7 +874,7 @@
 
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/z4WvW0hOh"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Original Sketch
           </a>
         </p>
@@ -794,10 +884,11 @@
         <h2>Exercise 3 - One Circle: Bezier Curves</h2>
 
         <p>
-          In this exercise, I used four Bezier curves to create
-          a circle. Each curve forms one quarter of the circle.
-          By connecting the four curves, I created a complete
-          circular shape. This was a different way to create
+          In this exercise, I used four Bezier curves
+          to create a circle. Each curve forms one
+          quarter of the circle. By connecting the
+          four curves, I created a complete circular
+          shape. This was a different way to create
           the same visual result.
         </p>
 
@@ -809,7 +900,7 @@
 
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/IMRvG9sGR"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Original Sketch
           </a>
         </p>
@@ -819,10 +910,11 @@
         <h2>Exercise 4 - One Circle: Turtle Graphics</h2>
 
         <p>
-          I created a circle by repeating small movements and
-          rotations. Instead of using a circle function, the
-          program draws many short lines. Each line changes
-          direction slightly, and together they form a circle.
+          I created a circle by repeating small movements
+          and rotations. Instead of using a circle function,
+          the program draws many short lines. Each line
+          changes direction slightly, and together they
+          form a circle.
         </p>
 
         <iframe
@@ -833,7 +925,7 @@
 
         <p>
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/1LzIvMFNI"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Original Sketch
           </a>
         </p>
@@ -843,37 +935,38 @@
         <h2>Reflection</h2>
 
         <p>
-          This week, we learned more ways to use mathematics
-          in creative coding. I found it interesting that
-          the same image on the screen can be created using
-          different mathematical methods. For example, we
-          used three different ways to draw a circle.
+          This week, we learned more ways to use
+          mathematics in creative coding. I found it
+          interesting that the same image on the screen
+          can be created using different mathematical
+          methods. For example, we used three different
+          ways to draw a circle.
         </p>
 
         <p>
-          Learning about sine and cosine reminded me of
-          studying mathematics in high school several years
-          ago. At that time, I spent a lot of time memorising
-          formulas, but I did not always understand why
-          they worked.
+          Learning about sine and cosine reminded me
+          of studying mathematics in high school several
+          years ago. At that time, I spent a lot of time
+          memorising formulas, but I did not always
+          understand why they worked.
         </p>
 
         <p>
-          This week made me think about the difference between
-          knowing how something works and understanding why it
-          works. I want to understand the ideas behind the
-          formulas instead of only remembering them. However,
-          I still find mathematics quite complicated.
-          Sometimes, memorising a formula feels easier than
-          understanding it.
+          This week made me think about the difference
+          between knowing how something works and
+          understanding why it works. I want to understand
+          the ideas behind the formulas instead of only
+          remembering them. However, I still find mathematics
+          quite complicated. Sometimes, memorising a formula
+          feels easier than understanding it.
         </p>
 
         <p>
           I think it is important to keep learning different
           methods. Even if I forget one method, I may still
           be able to solve the same problem in another way.
-          More importantly, having different approaches gives
-          me more freedom when creating digital artwork.
+          More importantly, having different approaches
+          gives me more freedom when creating digital artwork.
         </p>
       </div>
 
@@ -881,30 +974,27 @@
         <h2>AI Disclaimer</h2>
 
         <p>
-          I used ChatGPT as a learning assistant during this
-          week's creative coding exercises. AI helped me
-          understand mathematical concepts such as sin(),
-          cos(), Bezier curves and turtle graphics. It also
-          helped me write and check code, explain programming
-          concepts and identify errors.
+          I used ChatGPT as a learning assistant during
+          this week's creative coding exercises. AI helped
+          me understand mathematical concepts such as
+          sin(), cos(), Bezier curves and turtle graphics.
+          It also helped me write and check code, explain
+          programming concepts and identify errors.
         </p>
 
         <p>
-          I also used AI to help organise my reflection and
-          improve my English writing. The personal experiences
-          and opinions in the reflection are my own. AI was
-          used to support my learning and understanding of
-          creative coding.
+          I also used AI to help organise my reflection
+          and improve my English writing. The personal
+          experiences and opinions in the reflection
+          are my own. AI was used to support my learning
+          and understanding of creative coding.
         </p>
       </div>
-
     </section>
 
-
-    <!-- ================= WEEK 8 ================= -->
+    <!-- WEEK 8 -->
 
     <section class="week" id="week8">
-
       <h2 class="week-title">Week 8</h2>
       <p class="week-description">
         Image Processing and Interaction
@@ -926,13 +1016,14 @@
           <h3>1. Color of a Pixel</h3>
 
           <p>
-            This exercise uses the mouse to read colours
-            from an image. The colour of a circle changes
-            depending on the position of the mouse.
+            This exercise uses the mouse to read
+            colours from an image. The colour of
+            a circle changes depending on the
+            position of the mouse.
           </p>
 
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/drBQJziof"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Sketch - Color of a Pixel
           </a>
         </div>
@@ -941,13 +1032,14 @@
           <h3>2. Searching for the Brightest Point</h3>
 
           <p>
-            This exercise uses a webcam to analyse the
-            brightness of pixels in real time. A red circle
-            marks the brightest point in the video.
+            This exercise uses a webcam to analyse
+            the brightness of pixels in real time.
+            A red circle marks the brightest point
+            in the video.
           </p>
 
           <a href="https://editor.p5js.org/zsmzsm9696/sketches/UoReWzksS"
-             target="_blank">
+             target="_blank" rel="noopener noreferrer">
             View Sketch - Searching for the Brightest Point
           </a>
         </div>
@@ -957,21 +1049,24 @@
         <h2>Reflection</h2>
 
         <p>
-          This week, we learned how to use the mouse and
-          webcam to detect colours and create interactive
-          sketches in p5.js. Through these exercises, I
-          learned how computers can read and analyse colours
+          This week, we learned how to use the
+          mouse and webcam to detect colours
+          and create interactive sketches in p5.js.
+          Through these exercises, I learned how
+          computers can read and analyse colours
           from images and live video.
         </p>
 
         <p>
-          However, the most memorable part of this week
-          was when our teacher showed us how to customise
-          our GitHub profiles using different colours and
-          fonts. I found this really interesting because
-          it allows us to make our profiles more personal
-          and creative. I am planning to try decorating
-          my own GitHub profile later.
+          However, the most memorable part of
+          this week was when our teacher showed
+          us how to customise our GitHub profiles
+          using different colours and fonts.
+          I found this really interesting because
+          it allows us to make our profiles more
+          personal and creative. I am planning
+          to try decorating my own GitHub
+          profile later.
         </p>
       </div>
 
@@ -979,14 +1074,13 @@
         <h2>AI Disclaimer</h2>
 
         <p>
-          I used ChatGPT to help me understand p5.js
-          functions, explain code step by step, and fix
-          errors during the exercises. I also used AI
-          to help organise and improve the English
-          in my reflection.
+          I used ChatGPT to help me understand
+          p5.js functions, explain code step by
+          step, and fix errors during the exercises.
+          I also used AI to help organise and
+          improve the English in my reflection.
         </p>
       </div>
-
     </section>
 
   </main>
@@ -995,6 +1089,90 @@
     <p>Introduction to Creative Computing</p>
     <p>Shuming Zhang · Creative Coding Portfolio</p>
   </footer>
+
+  <!-- MOUSE PARTICLE EFFECT -->
+
+  <script>
+    const canvas = document.getElementById("particle-canvas");
+    const ctx = canvas.getContext("2d");
+
+    let particles = [];
+    let mouseX = 0;
+    let mouseY = 0;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+
+    window.addEventListener("resize", resizeCanvas);
+
+    // Create particles when the mouse moves.
+    // 鼠标移动时生成粒子。
+
+    if (!reduceMotion) {
+      window.addEventListener("pointermove", function(event) {
+        if (event.pointerType === "touch") return;
+
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+
+        for (let i = 0; i < 2; i++) {
+          particles.push({
+            x: mouseX,
+            y: mouseY,
+            vx: (Math.random() - 0.5) * 2,
+            vy: (Math.random() - 0.5) * 2,
+            radius: Math.random() * 2.5 + 1,
+            life: 1
+          });
+        }
+
+        // Limit the number of particles.
+        // 限制粒子数量，避免影响网页性能。
+
+        if (particles.length > 180) {
+          particles.splice(0, particles.length - 180);
+        }
+      });
+    }
+
+    // Update and draw the particles.
+    // 更新并绘制粒子。
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i];
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life -= 0.025;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(220, 220, 255, " + p.life + ")";
+        ctx.fill();
+
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    if (!reduceMotion) {
+      animateParticles();
+    }
+  </script>
 
 </body>
 </html>
